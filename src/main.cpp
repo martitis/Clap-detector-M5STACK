@@ -14,8 +14,8 @@
 
 double sigPeakDetect = 16000;
 int peakLenght = 1000;
-int claps = 0;
-int clapType = 0;
+int claps = -1;
+int clapType = -1;
 int clapLenght = 1000;
 int timeStart = 0;
 int maxPossiblePauseBetweenClaps = 4000;
@@ -90,8 +90,8 @@ static void i2cMicProcesstask(void *arg)
       if (M5.BtnA.wasReleased() || M5.BtnA.pressedFor(1000, 200)) {
         if (clapLenght < maxPossiblePauseBetweenClaps) { //didziauasias laiko tarpas tarp suplojimu 
           clapLenght += 200;
-          M5.Lcd.fillRect(43,36,62,21, BLACK); // Istrina(Pakeicia juodais pixeliais) sena teksta 21 turbut eilutes aukstis pixeliais
-          M5.Lcd.setCursor(43,36);
+          M5.Lcd.fillRect(43,60,200,21, BLACK); // Istrina(Pakeicia juodais pixeliais) sena teksta 21 turbut eilutes aukstis pixeliais
+          M5.Lcd.setCursor(43,60);
           M5.Lcd.printf("Tarpas:");
           M5.Lcd.print(clapLenght);
         }
@@ -99,8 +99,8 @@ static void i2cMicProcesstask(void *arg)
       if (M5.BtnB.wasReleased() || M5.BtnB.pressedFor(1000, 200)) {
         if (clapLenght > 500) {
           clapLenght -= 200;
-          M5.Lcd.fillRect(43,36,62,21, BLACK); // Istrina(Pakeicia juodais pixeliais) sena teksta 21 turbut eilutes aukstis pixeliais
-          M5.Lcd.setCursor(43,36);
+          M5.Lcd.fillRect(43,60,200,21, BLACK); // Istrina(Pakeicia juodais pixeliais) sena teksta 21 turbut eilutes aukstis pixeliais
+          M5.Lcd.setCursor(43,60);
           M5.Lcd.printf("Tarpas:");
           M5.Lcd.print(clapLenght);
         }
@@ -145,24 +145,39 @@ static void i2cMicProcesstask(void *arg)
         if(clapType > 3){
           clapType = 3;
         }
+        } 
+    }
+      if (clapType == 3)
+      {
+        tripleClapType = tripleClapType + 1;
+      }
+      else if (clapType == 2)
+      {
+        doubleClapType = doubleClapType + 1;
+      }
+      else if (clapType == 1)
+      {
+        oneClapType = oneClapType + 1;
       }
     }
     //tipu atskyrimas ir atvaizdavimas
    if(millis()-timeStart>clapLenght && timeStart!=0) {
-      M5.Lcd.fillRect(43,0,62,21, BLACK); //ekrano pikseliu koordinates
+      M5.Lcd.fillRect(43,0,200,21, BLACK); //ekrano pikseliu koordinates
+      M5.Lcd.fillRect(43,20,200,21, BLACK);
+      M5.Lcd.fillRect(43,40,200,21, BLACK);
       M5.Lcd.setCursor(43,0);
       M5.Lcd.printf("Viengubas:");
       M5.Lcd.print(oneClapType);
-      M5.Lcd.setCursor(43,12);
+      M5.Lcd.setCursor(43,20);
       M5.Lcd.printf("Dvigubas:");
       M5.Lcd.print(doubleClapType);
-      M5.Lcd.setCursor(43,24);
+      M5.Lcd.setCursor(43,40);
       M5.Lcd.printf("Trigubas:");
       M5.Lcd.print(tripleClapType);
       clapType=0;
       timeStart=0;
       }
-    }
+    
 
   }  
     else
@@ -182,8 +197,8 @@ void setup() {
   M5.Lcd.clear();
   M5.Lcd.setCursor(0,0); //kiekio spausdinimui
   //M5.Lcd.print("0");
-  M5.Lcd.fillRect(43,36,62,21, BLACK); // Istrina(Pakeicia juodais pixeliais) sena teksta 21 turbut eilutes aukstis pixeliais
-  M5.Lcd.setCursor(43,36);
+  M5.Lcd.fillRect(43,36,200,21, BLACK); // Istrina(Pakeicia juodais pixeliais) sena teksta 21 turbut eilutes aukstis pixeliais
+  M5.Lcd.setCursor(43,60);
   M5.Lcd.printf("Tarpas:");
   M5.Lcd.print(clapLenght);
   i2s_driver_install(I2S_NUM_0, &i2s_config, 0, NULL);
