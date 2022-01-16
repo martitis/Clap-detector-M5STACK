@@ -107,7 +107,6 @@ static void i2cMicProcesstask(void *arg)
       }
       if (M5.BtnC.wasReleased() || M5.BtnC.pressedFor(1000, 200)) {
         signalOrFFT = !signalOrFFT;
-        //M5.Lcd.clear();
       }
       if (signalOrFFT) {
         showSignal(rawSignalCopy.micRawData, rawSignalCopy.bytesRead, 10);
@@ -115,11 +114,7 @@ static void i2cMicProcesstask(void *arg)
 
     //Signalo spausdinimas i Serial terminala - imame kas 2 reiksme
     for (int i = 0; i < rawSignalCopy.bytesRead; i+=2){  
-      //Serial.println(rawSignalCopy.micRawData[i]);
-    // if(maxSignalas < rawSignalCopy.micRawData[i])
-    // {
-    //   maxSignalas = rawSignalCopy.micRawData[i];
-    // }
+ 
     if(rawSignalCopy.micRawData[i] > sigPeakDetect || rawSignalCopy.micRawData[i] < -sigPeakDetect) // Aptinkam suplojimus
     {
       int a = i;
@@ -128,6 +123,7 @@ static void i2cMicProcesstask(void *arg)
       while(rawSignalCopy.micRawData[a] > sigPeakDetect || rawSignalCopy.micRawData[a] < -sigPeakDetect) { // Einame per garso signala tol kol nukris zemiau aptikimo ribos
         count++;
         a++;
+        Serial.println(count);
         if(count > 2000) { // Tikriname ar signalas buvo per aukstas per ilga laiko tarpa 2000 yra tarpas, galimai reiks koreguot
           noise = true;
           break; // Iseinam is ciklo
@@ -142,11 +138,12 @@ static void i2cMicProcesstask(void *arg)
 
         clapType = clapType + 1;
         timeStart = millis();
-        if(clapType > 3){
-          clapType = 3;
-        }
-        } 
+      } 
     }
+    }
+
+    //tipu atskyrimas ir atvaizdavimas
+   if(millis()-timeStart>clapLenght && timeStart!=0) {
       if (clapType == 3)
       {
         tripleClapType = tripleClapType + 1;
@@ -159,9 +156,6 @@ static void i2cMicProcesstask(void *arg)
       {
         oneClapType = oneClapType + 1;
       }
-    }
-    //tipu atskyrimas ir atvaizdavimas
-   if(millis()-timeStart>clapLenght && timeStart!=0) {
       M5.Lcd.fillRect(43,0,200,21, BLACK); //ekrano pikseliu koordinates
       M5.Lcd.fillRect(43,20,200,21, BLACK);
       M5.Lcd.fillRect(43,40,200,21, BLACK);
