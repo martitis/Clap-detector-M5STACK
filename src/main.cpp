@@ -90,7 +90,7 @@ static void i2cMicProcesstask(void *arg)
       if (M5.BtnA.wasReleased() || M5.BtnA.pressedFor(1000, 200)) {
         if (clapLenght < maxPossiblePauseBetweenClaps) { //didziauasias laiko tarpas tarp suplojimu 
           clapLenght += 200;
-          M5.Lcd.fillRect(43,60,200,21, BLACK); // Istrina(Pakeicia juodais pixeliais) sena teksta 21 turbut eilutes aukstis pixeliais
+          M5.Lcd.fillRect(43,60,200,21, BLACK); // Istrina(Pakeicia juodais pixeliais) sena teksta 
           M5.Lcd.setCursor(43,60);
           M5.Lcd.printf("Tarpas:");
           M5.Lcd.print(clapLenght);
@@ -99,7 +99,7 @@ static void i2cMicProcesstask(void *arg)
       if (M5.BtnB.wasReleased() || M5.BtnB.pressedFor(1000, 200)) {
         if (clapLenght > 500) {
           clapLenght -= 200;
-          M5.Lcd.fillRect(43,60,200,21, BLACK); // Istrina(Pakeicia juodais pixeliais) sena teksta 21 turbut eilutes aukstis pixeliais
+          M5.Lcd.fillRect(43,60,200,21, BLACK); // Istrina(Pakeicia juodais pixeliais) sena teksta 
           M5.Lcd.setCursor(43,60);
           M5.Lcd.printf("Tarpas:");
           M5.Lcd.print(clapLenght);
@@ -123,8 +123,7 @@ static void i2cMicProcesstask(void *arg)
       while(rawSignalCopy.micRawData[a] > sigPeakDetect || rawSignalCopy.micRawData[a] < -sigPeakDetect) { // Einame per garso signala tol kol nukris zemiau aptikimo ribos
         count++;
         a++;
-        Serial.println(count);
-        if(count > 2000) { // Tikriname ar signalas buvo per aukstas per ilga laiko tarpa 2000 yra tarpas, galimai reiks koreguot
+        if(count > 2000) { // Tikriname ar signalas buvo per aukstas per ilga laiko tarpa 
           noise = true;
           break; // Iseinam is ciklo
         }
@@ -191,7 +190,7 @@ void setup() {
   M5.Lcd.clear();
   M5.Lcd.setCursor(0,0); //kiekio spausdinimui
   //M5.Lcd.print("0");
-  M5.Lcd.fillRect(43,36,200,21, BLACK); // Istrina(Pakeicia juodais pixeliais) sena teksta 21 turbut eilutes aukstis pixeliais
+  M5.Lcd.fillRect(43,36,200,21, BLACK); // Istrina(Pakeicia juodais pixeliais) sena teksta
   M5.Lcd.setCursor(43,60);
   M5.Lcd.printf("Tarpas:");
   M5.Lcd.print(clapLenght);
